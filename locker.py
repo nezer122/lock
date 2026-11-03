@@ -1,4 +1,4 @@
-import pygaru
+import pygame
 import time 
 PASSWORD = "90481"
 MAX_ATTEMPTS = 3
