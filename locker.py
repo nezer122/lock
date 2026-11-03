@@ -1,8 +1,6 @@
 import pygame
 import sys
 import time
-import win32con
-import win32gui
 
 PASSWORD = "90481"
 MAX_ATTEMPTS = 3
