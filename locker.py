@@ -1,5 +1,6 @@
 import pygame
 import time 
+import keyboard
 PASSWORD = "90481"
 MAX_ATTEMPTS = 3
 LOG_FILE = "winlocker.log"
