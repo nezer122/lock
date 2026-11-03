@@ -1,7 +1,6 @@
 import pygame
 import sys
 import time
-import keyboard
 import win32con
 import win32gui
 
@@ -45,23 +44,8 @@ BLOCKED = [
     "win+left","win+right",
 ]
 
-def block_keys():
-    for combo in BLOCKED:
-        try:
-            keyboard.add_hotkey(combo, lambda: None, suppress=True)
-        except Exception:
-            pass
-    for k in ("left windows","right windows"):
-        try:
-            keyboard.block_key(k)
-        except Exception:
-            pass
 
-def unblock_keys():
-    try:
-        keyboard.unhook_all()
-    except Exception:
-        pass
+
 
 def fmt_time(sec):
     sec = max(0, int(sec))
@@ -72,8 +56,6 @@ def fmt_time(sec):
 
 def run_locker():
     disable_taskmgr()
-    block_keys()
-
     pygame.init()
     info = pygame.display.Info()
     W, H = info.current_w, info.current_h
