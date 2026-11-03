@@ -126,7 +126,7 @@ def run_locker():
                         log(f"UNLOCK: верный пароль, оставалось попыток {attempts_left}")
                         reason = "пароль"
                         locked = False
-                      else:
+                    else:
                         attempts_left -= 1
                         log(f"FAIL: неверный пароль, осталось попыток {attempts_left}")
                         entered = ""
@@ -187,5 +187,5 @@ def run_locker():
 def main():
     run_locker()
 
-if name == "main":
+if __name__ == "__main__":
     main()
