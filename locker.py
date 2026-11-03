@@ -4,15 +4,15 @@ import keyboard
 PASSWORD = "90481"
 MAX_ATTEMPTS = 3
 LOG_FILE = "winlocker.log"
-BLOCKED = [ "alt+f4","alt+tab","alt+esc","alt+space",
+BLOCKED = ["alt+f4","alt+tab","alt+esc","alt+space",
     "ctrl+esc","ctrl+shift+esc","ctrl+alt+delete",
     "win","win+d","win+r","win+l","win+tab","win+e",
     "win+x","win+i","win+s","win+a","win+p","win+u",
     "win+m","win+shift+m","win+space","win+up","win+down",
-    "win+left","win+right",]
+    "win+left","win+right"]
 
 def is_blocked_key(event):
-    return event.unicode.lower() in BLOCKED
+    return event.unicode in BLOCKED
 
 
 def log(msg):
@@ -72,48 +72,127 @@ def run_locker():
 
     box_w, box_h = 420, 48
     box = pygame.Rect(W//2 - box_w//2, H//2 + 80, box_w, box_h)
-
     while locked:
-
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                continue
+                pygame.quit()
+                return
+
             if e.type == pygame.MOUSEBUTTONDOWN:
                 if input_enabled and box.collidepoint(e.pos):
                     field_focused = True
-            if e.type == pygame.KEYDOWN:
-                if not (field_focused and input_enabled):
-                    continue
 
-                if e.key == pygame.K_ESCAPE:
+            if e.type == pygame.KEYDOWN:
+                mods = pygame.key.get_mods()
+
+                # Проверка пользовательских сочетаний
+                if e.key == pygame.K_j and mods & pygame.KMOD_CTRL:
+                    message = "Ctrl + J распознано"
+
+                elif e.key == pygame.K_k and mods & pygame.KMOD_CTRL:
+                    message = "Ctrl + K распознано"
+                
+                elif e.key == pygame.K_f4 and mods & pygame.KMOD_ALT:
+                    message = "alt+f4 распознано"
+
+                elif e.key == pygame.K_tab and mods & pygame.KMOD_ALT:
+                    message = "alt+tab распознано"
+
+                elif e.key == pygame.K_esc and mods & pygame.KMOD_ALT:
+                    message = "alt+esc распознано"
+
+                elif e.key == pygame.K_space and mods & pygame.KMOD_ALT:
+                    message = "alt+space распознано"
+
+                elif e.key == pygame.K_esc and mods & pygame.KMOD_CTRL:
+                    message = "ctrl+esc распознано"
+
+                elif e.key == pygame.K_esc and mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT:
+                
+                    message = "ctrl+shift+esc распознано"
+
+                elif e.key == pygame.K_delete and mods & pygame.KMOD_CTRL and mods & pygame.KMOD_ALT:
+                    message = "ctrl+alt+delete распознано"
+
+                elif e.key == pygame.K_win and mods & pygame.KMOD_WIN:
+                    message = "win распознано"
+
+                elif e.key == pygame.K_d and mods & pygame.KMOD_WIN:
+                    message = "win+d распознано"
+
+                elif e.key == pygame.K_r and mods & pygame.KMOD_WIN:
+                    message = "win+r распознано"
+
+                elif e.key == pygame.K_l and mods & pygame.KMOD_WIN:
+                    message = "win+l распознано"
+
+                elif e.key == pygame.K_tab and mods & pygame.KMOD_WIN:
+                    message = "win+tab распознано"
+
+                elif e.key == pygame.K_e and mods & pygame.KMOD_WIN:
+                    message = "win+e распознано"
+
+                elif e.key == pygame.K_x and mods & pygame.KMOD_WIN:
+                    message = "win+x распознано"
+
+                elif e.key == pygame.K_i and mods & pygame.KMOD_WIN:
+                    message = "win+i распознано"
+
+                elif e.key == pygame.K_s and mods & pygame.KMOD_WIN:
+                    message = "win+s распознано"
+
+                elif e.key == pygame.K_a and mods & pygame.KMOD_WIN:
+                    message = "win+a распознано"
+
+                elif e.key == pygame.K_p and mods & pygame.KMOD_WIN:
+                    message = "win+p распознано"
+
+                elif e.key == pygame.K_u and mods & pygame.KMOD_WIN:
+                    message = "win+u распознано"
+
+                elif e.key == pygame.K_m and mods & pygame.KMOD_WIN:
+                    message = "win+m распознано"
+
+                elif e.key == pygame.K_m and mods & pygame.KMOD_WIN and mods & pygame.KMOD_SHIFT:
+                    message = "win+shift+m распознано"
+                    
+                elif e.key == pygame.K_space and mods & pygame.KMOD_WIN:
+                    message = "win+space распознано"
+
+                elif e.key == pygame.K_up and mods & pygame.KMOD_WIN:
+                    message = "win+up распознано"
+
+                elif e.key == pygame.K_down and mods & pygame.KMOD_WIN:
+                    message = "win+down распознано"
+
+                elif e.key == pygame.K_left and mods & pygame.KMOD_WIN:
+                    message = "win+left распознано"
+
+                elif e.key == pygame.K_right and mods & pygame.KMOD_WIN:
+                    message = "win+right распознано"
+
+                
+                # Ввод пароля
+                if not (field_focused and input_enabled):
                     continue
 
                 if e.key == pygame.K_RETURN:
                     if entered == PASSWORD:
-                        log(f"UNLOCK: верный пароль, оставалось попыток {attempts_left}")
+                        log("UNLOCK: верный пароль")
                         reason = "пароль"
                         locked = False
                     else:
                         attempts_left -= 1
-                        log(f"FAIL: неверный пароль, осталось попыток {attempts_left}")
                         entered = ""
-
-                        if attempts_left > 0:
-                            word = "попытка" if attempts_left == 1 else "попытки"
-                            message = f"Пароль указан неверно, осталось {attempts_left} {word}"
-                        else:
-                            message = "Попытки исчерпаны."
-                            input_enabled = False
-                            field_focused = False
 
                 elif e.key == pygame.K_BACKSPACE:
                     entered = entered[:-1]
 
                 else:
                     ch = e.unicode
-
                     if ch.isprintable() and len(entered) < 32:
-                        entered += ch                
+                        entered += ch
+                
                 
         
         screen.fill((10, 10, 14))
