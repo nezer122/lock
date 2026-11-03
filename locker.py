@@ -61,9 +61,6 @@ def run_locker():
     font = pygame.font.SysFont("consolas", 28)
     big = pygame.font.SysFont("consolas", 56, bold=True)
 
-    hwnd = pygame.display.get_wm_info()["window"]
-    win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, W, H, 0)
-
     entered = ""
     message = "Введите пароль для разблокировки"
     locked = True
