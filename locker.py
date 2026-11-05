@@ -110,9 +110,8 @@ def run_locker():
                     message = "ctrl+esc распознано"
 
                 elif e.key == pygame.K_esc and mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT:
-                
                     message = "ctrl+shift+esc распознано"
-
+                    
                 elif e.key == pygame.K_delete and mods & pygame.KMOD_CTRL and mods & pygame.KMOD_ALT:
                     message = "ctrl+alt+delete распознано"
 
